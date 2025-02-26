@@ -7,7 +7,7 @@ function QuestionList({ list, setList }) {
     fetch("http://localhost:4000/questions")
       .then(resp => resp.json())
       .then(data => setList(data))
-  }, [])
+  }, [list])
 
   return (
     <section>
@@ -17,6 +17,7 @@ function QuestionList({ list, setList }) {
         <QuestionItem 
         key={items.id} 
         question={items}
+        setList={setList}
         />
       );
       })}</ul>

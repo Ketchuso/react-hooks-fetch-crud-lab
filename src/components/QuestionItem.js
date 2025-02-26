@@ -1,12 +1,29 @@
 import React from "react";
 
-function QuestionItem({ question }) {
+function QuestionItem({ question, setList }) {
   const { id, prompt, answers, correctIndex } = question;
   const options = answers.map((answer, index) => (
     <option key={index} value={index}>
       {answer}
     </option>
   ));
+
+  function handleClick(){
+    fetch (`http://localhost:4000/questions/${id}`,{
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(resp => {
+        if (resp.ok){
+          setList((prevList) => prevList.filter((question) => question.id !== id))
+        } else{
+          console.error("Failed to delete the question")
+        }
+      })
+      .catch((error) => console.error('Error deleting question:', error))
+  }
 
   return (
     <li>
@@ -16,7 +33,7 @@ function QuestionItem({ question }) {
         Correct Answer:
         <select defaultValue={correctIndex}>{options}</select>
       </label>
-      <button>Delete Question</button>
+      <button onClick={handleClick}>Delete Question</button>
     </li>
   );
 }
